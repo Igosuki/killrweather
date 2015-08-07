@@ -13,7 +13,7 @@
         "KAFKA_HOSTS": "broker-0.kafka.mesos:1025",
         "SPARK_HA_MASTER": "mesos://spark.marathon.mesos:10003"
     },
-    "cmd": "sbt \"clients/run-main com.datastax.killrweather.KafkaDataIngestionApp\"",
+    "cmd": "sbt -mem 4096 \"clients/run-main com.datastax.killrweather.KafkaDataIngestionApp\"",
     "ports": [8080],
     "cpus": 2,
     "mem": 4096

@@ -13,7 +13,7 @@
         "KAFKA_HOSTS": "broker-0.kafka.mesos:1025",
         "SPARK_HA_MASTER": "mesos://spark.marathon.mesos:10003"
     },
-    "cmd": "sbt \"clients/run-main com.datastax.killrweather.KillrWeatherClientApp\"",
+    "cmd": "sbt -mem 1024 \"clients/run-main com.datastax.killrweather.KillrWeatherClientApp\"",
     "cpus": 1,
-    "mem": 1200
+    "mem": 1024
 }

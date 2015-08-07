@@ -13,7 +13,7 @@
         "KAFKA_HOSTS": "broker-0.kafka.mesos:1025",
         "SPARK_HA_MASTER": "mesos://spark.marathon.mesos:10003"
     },
-    "cmd": "sbt app/run",
+    "cmd": "sbt -mem 1024 app/run",
     "cpus": 1,
-    "mem": 1200
+    "mem": 1024
 }
