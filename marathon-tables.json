@@ -1,0 +1,13 @@
+{
+    "id": "/killrweather/tables",
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "spotify/cassandra",
+            "network": "HOST"
+        }
+    },
+    "cmd": "wget https://raw.githubusercontent.com/killrweather/killrweather/master/data/weather_stations.csv && wget https://raw.githubusercontent.com/killrweather/killrweather/master/data/create-timeseries.cql && wget https://raw.githubusercontent.com/killrweather/killrweather/master/data/load-timeseries.cql && /usr/bin/cqlsh -e \"source 'create-timeseries.cql'; source 'load-timeseries.cql';\" cassandra-dcos-node.cassandra.dcos.mesos 9160 && sleep 99999999",
+    "cpus": 0.1,
+    "mem": 256.0
+}

@@ -1,0 +1,19 @@
+{
+    "id": "/killrweather/app",
+    "instances": 1,
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "abhayagarwal/killrweather:0.3",
+            "privileged": true
+        }
+    },
+    "env": {
+        "CASSANDRA_SEEDS": "cassandra-dcos-node.cassandra.dcos.mesos",
+        "KAFKA_HOSTS": "broker-0.kafka.mesos:1025",
+        "SPARK_HA_MASTER": "mesos://spark.marathon.mesos:10003"
+    },
+    "cmd": "sbt app/run",
+    "cpus": 1,
+    "mem": 1200
+}
