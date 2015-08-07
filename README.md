@@ -157,3 +157,45 @@ In the cql shell:
 To close the cql shell:
 
     cqlsh> quit;
+
+
+## Setting up Killrweather on DCOS
+
+### Services
+
+Killrweather on DCOS uses the primitives for Cassandra, Kafka, and Spark. Starting from a fresh DCOS install, please execute the following commands foir wherever you have installed the DCOS CLI:
+
+    dcos package install cassandra
+    dcos package install spark
+    dcos package install kafka
+    // after kafka is installed:
+    dcos kafka add 0
+    dcos kafka start 0
+
+You should now see all three services spinning up as well as a Kafka broker started up.
+
+### Marathon apps
+
+You must make several changes to the marathon apps included in the root directory of this project. Please edit the environment variables to point to the ports assigned to Spark and the Kafka broker. For example a spark running on ports 10002 and 10003 and a kafka broker running on port 1025, the relevant configs would look like:
+
+    "KAFKA_HOSTS": "broker-0.kafka.mesos:1025"
+
+and
+
+    "SPARK_HA_MASTER": "mesos://spark.marathon.mesos:10002"
+
+Note that you can use the Mesos UI to find these ports by looking at each respective task's sandbox.
+
+### Deploying the apps
+
+You must wait for all services to become `HEALTHY` in the DCOS GUI. After that, deploy the marathon app that sets up cassandra's tables:
+
+    dcos marathon app add ./marathon-tables.json
+
+Once this app is healthy as well from the Marathon UI, you may install the three different Akka apps (described in detail below)
+
+    dcos marathon app add ./marathon-app.json
+    dcos marathon app add ./marathon-client-kafka.json
+    dcos marathon app add ./marathon-client-analytics.json
+
+You now have a fully running SMACK stack!
