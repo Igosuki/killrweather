@@ -161,6 +161,22 @@ To close the cql shell:
 
 ## Setting up Killrweather on DCOS
 
+### Overall description
+
+DCOS allows you to use predefined and auto-deployed versions of all pieces of Killrweather. The Akka actors are all present inside separate docker containers and deployed with Marathon. The systems are fault-tolerant, and Mesos scheduling allows each separate component to be highly-available.
+
+#### Bill of Materials
+
+You will be using:
+
+1. A fresh DCOS cluster (or one with enough spare capacity to run the relevant containers)
+1. The DCOS CLI
+1. Cassandra
+1. Kafka
+1. Spark (Spark streaming)
+1. SBT
+1. Code-injected components for Akka, Spark-cassandra, Spark-kafka. These are all compiled in with sbt.
+
 ### Services
 
 Killrweather on DCOS uses the primitives for Cassandra, Kafka, and Spark. Starting from a fresh DCOS install, please execute the following commands foir wherever you have installed the DCOS CLI:
