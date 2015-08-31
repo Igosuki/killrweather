@@ -1,20 +1,25 @@
 {
-    "id": "/killrweather/dataingest",
+    "id": "/dataingest-killrweather",
     "instances": 1,
     "container": {
         "type": "DOCKER",
         "docker": {
             "image": "abhayagarwal/killrweather:0.3",
-            "privileged": true
+            "privileged": true,
+            "forcePullImage": true
         }
     },
     "env": {
         "CASSANDRA_SEEDS": "cassandra-dcos-node.cassandra.dcos.mesos",
         "KAFKA_HOSTS": "broker-0.kafka.mesos:1025",
-        "SPARK_HA_MASTER": "mesos://spark.marathon.mesos:10003"
+        "SPARK_HA_MASTER": "local[*]",
+        "AKKA_SEED0": "akka.tcp://KillrWeather@akka-seed-0.marathon.mesos:2551",
+        "AKKA_SEED1": "akka.tcp://KillrWeather@akka-seed-1.marathon.mesos:2552",
+        "AKKA_HOST": "dataingest-killrweather.marathon.mesos",
+        "AKKA_HTTP_PORT": "8080"
     },
-    "cmd": "sbt -mem 4096 \"clients/run-main com.datastax.killrweather.KafkaDataIngestionApp\"",
-    "ports": [8080],
+    "cmd": "sleep 30 && export AKKA_BIND_HOST=$(hostname) && sbt -mem 4096 \"clients/run-main com.datastax.killrweather.KafkaDataIngestionApp\"",
+    "ports": [2551,8080],
     "cpus": 2,
     "mem": 4096
 }

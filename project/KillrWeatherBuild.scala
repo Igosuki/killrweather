@@ -93,9 +93,12 @@ object Dependencies {
 
     val akkaStream        = "com.typesafe.akka"   %% "akka-stream-experimental"           % AkkaStreams
     val akkaHttpCore      = "com.typesafe.akka"   %% "akka-http-core-experimental"        % AkkaStreams
+    val akkaHttp          = "com.typesafe.akka"   %% "akka-http-experimental"             % AkkaStreams
     val akkaActor         = "com.typesafe.akka"   %% "akka-actor"                         % Akka
     val akkaCluster       = "com.typesafe.akka"   %% "akka-cluster"                       % Akka
     val akkaRemote        = "com.typesafe.akka"   %% "akka-remote"                        % Akka
+    // val akkaMetrics       = "com.typesafe.akka"   %% "akka-cluster-metrics"               % Akka
+    // val akkaTools         = "com.typesafe.akka"   %% "akka-cluster-tools"                 % Akka
     val akkaSlf4j         = "com.typesafe.akka"   %% "akka-slf4j"                         % Akka
     val algebird          = "com.twitter"         %% "algebird-core"                      % Albebird
     val bijection         = "com.twitter"         %% "bijection-core"                     % Bijection
@@ -127,7 +130,7 @@ object Dependencies {
 
   import Compile._
 
-  val akka = Seq(akkaStream, akkaHttpCore, akkaActor, akkaCluster, akkaRemote, akkaSlf4j)
+  val akka = Seq(akkaStream, akkaHttpCore, akkaHttp, akkaActor, akkaCluster, akkaRemote, /*akkaMetrics, akkaTools,*/ akkaSlf4j)
 
   val connector = Seq(driver, sparkCassandra, sparkCatalyst, sparkCassandraEmb)
 
@@ -142,7 +145,8 @@ object Dependencies {
   val test = Seq(Test.akkaTestKit, Test.scalatest)
 
   /** Module deps */
-  val client = akka ++ logging ++ scalaz ++ Seq(pickling, sparkCassandraEmb, sigar)
+  val client = akka ++ logging ++ scalaz ++
+    Seq(pickling, sparkCassandraEmb, sigar)
 
   val core = akka ++ logging ++ time
 

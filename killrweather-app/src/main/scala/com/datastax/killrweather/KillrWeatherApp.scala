@@ -41,7 +41,7 @@ object KillrWeatherApp extends App {
   import settings._
 
   /** Creates the ActorSystem. */
-  val system = ActorSystem(AppName)
+  val system = ActorSystem("KillrWeather")
 
   val killrWeather = KillrWeather(system)
 
@@ -74,10 +74,7 @@ class KillrWeather(system: ExtendedActorSystem) extends Extension {
   implicit private val timeout = system.settings.CreationTimeout
 
   /** Starts the Kafka broker and Zookeeper. */
-  private val kafka = new EmbeddedKafka
-
-  /** Creates the raw data topic. */
-  kafka.createTopic(KafkaTopicRaw)
+  private val kafka = new EmbeddedKafka(Map("zk" -> "leader.mesos:2181"))
 
   /** Configures Spark. */
   protected val conf = new SparkConf().setAppName(getClass.getSimpleName)
@@ -93,10 +90,6 @@ class KillrWeather(system: ExtendedActorSystem) extends Extension {
 
   private val cluster = Cluster(system)
 
-  val selfAddress: Address = cluster.selfAddress
-
-  cluster.joinSeedNodes(Vector(selfAddress))
-
   def isRunning: Boolean = _isRunning.get
 
   def isTerminated: Boolean = _isTerminated.get
@@ -104,8 +97,6 @@ class KillrWeather(system: ExtendedActorSystem) extends Extension {
   private def shutdown(): Unit = if (!isTerminated) {
     import akka.pattern.ask
     if (_isTerminated.compareAndSet(false, true)) {
-      log.info("Node {} shutting down", selfAddress)
-      cluster leave selfAddress
       kafka.shutdown()
       ssc.stop(stopSparkContext = true, stopGracefully = true)
 

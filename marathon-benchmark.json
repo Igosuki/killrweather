@@ -1,0 +1,14 @@
+{
+    "id": "/killrweather/app",
+    "instances": 1,
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "jordi/ab",
+            "privileged": true
+        }
+    },
+    "cmd": "ab -v 2 -n 100000 -c 150 -v 2 http://",
+    "cpus": 1,
+    "mem": 1024
+}

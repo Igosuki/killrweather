@@ -28,7 +28,7 @@ import com.datastax.spark.connector.embedded.Event
 object KillrWeatherClientApp extends App with ClientHelper {
 
   /** Creates the ActorSystem. */
-  val system = ActorSystem("KillrWeather", ConfigFactory.parseString("akka.remote.netty.tcp.port = 2552"))
+  val system = ActorSystem("KillrWeather", ConfigFactory.parseString("akka.remote.netty.tcp.port = 2551"))
 
   /* The root supervisor and fault tolerance handler of the data ingestion nodes. */
   val guardian = system.actorOf(Props[ApiNodeGuardian], "node-guardian")
@@ -75,8 +75,7 @@ private[killrweather] class AutomatedApiActor extends Actor with ActorLogging wi
   import Weather._
   import WeatherEvent._
 
-  val guardian = context.actorSelection(Cluster(context.system).selfAddress
-    .copy(port = Some(BasePort)) + "/user/node-guardian")
+  val guardian = context.actorSelection("/user/node-guardian")
 
   var queried: Set[Day] = Set(Day("725030:14732", 2008, 12, 31)) // just the initial one
 

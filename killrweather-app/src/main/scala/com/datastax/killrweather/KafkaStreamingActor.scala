@@ -17,6 +17,8 @@ package com.datastax.killrweather
 
 import akka.actor.{ActorLogging, Actor, ActorRef}
 import kafka.serializer.StringDecoder
+import kafka.admin.AdminUtils
+import org.I0Itec.zkclient.{IZkStateListener, ZkClient}
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.kafka.KafkaUtils
@@ -35,6 +37,9 @@ class KafkaStreamingActor(kafkaParams: Map[String, String],
   import settings._
   import WeatherEvent._
   import Weather._
+
+  val zkClient = new ZkClient(kafkaParams("zk"))
+  AdminUtils.createTopic(zkClient, KafkaTopicRaw, 1, 1)
 
   val kafkaStream = KafkaUtils.createStream[String, String, StringDecoder, StringDecoder](
     ssc, kafkaParams, Map(KafkaTopicRaw -> 1), StorageLevel.DISK_ONLY_2)

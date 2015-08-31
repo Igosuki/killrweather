@@ -48,7 +48,7 @@ class NodeGuardian(ssc: StreamingContext, kafka: EmbeddedKafka, settings: Weathe
 
   override def preStart(): Unit = {
     super.preStart()
-    cluster.joinSeedNodes(Vector(cluster.selfAddress))
+    // cluster.joinSeedNodes(Vector(cluster.selfAddress))
   }
 
   /** When [[OutputStreamInitialized]] is received in the parent actor, [[ClusterAwareNodeGuardian]],
